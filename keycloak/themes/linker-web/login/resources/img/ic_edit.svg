@@ -1,0 +1,7 @@
+<svg id="レイヤー_1" data-name="レイヤー 1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <rect width="32" height="32" fill="none"/>
+  <g>
+    <path d="M11.74,2.26h12a0,0,0,0,1,0,0v22a2,2,0,0,1-2,2h-8a2,2,0,0,1-2-2v-22a0,0,0,0,1,0,0Z" transform="translate(20.2 36.89) rotate(-135)" fill="#3f28e2"/>
+    <path d="M3.5,29.63l8.58-1.23L3.6,19.92,2.37,28.5A1,1,0,0,0,3.5,29.63Z" fill="#3f28e2"/>
+  </g>
+</svg>
