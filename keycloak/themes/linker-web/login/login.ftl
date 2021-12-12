@@ -1,72 +1,70 @@
 <#import "template.ftl" as layout>
 <@layout.registrationLayout displayInfo=social.displayInfo displayWide=(realm.password && social.providers??); section>
-    <#if section = "header">
-        ${msg("doLogIn")}
-    <#elseif section = "form">
-    <div id="kc-form" <#if realm.password && social.providers??>class="${properties.kcContentWrapperClass!}"</#if>>
-      <div id="kc-form-wrapper" <#if realm.password && social.providers??>class="${properties.kcFormSocialAccountContentClass!} ${properties.kcFormSocialAccountClass!}"</#if>>
-        <#if realm.password>
-            <form id="kc-form-login" onsubmit="login.disabled = true; return true;" action="${url.loginAction}" method="post">
-                <div class="${properties.kcFormGroupClass!}">
-                    <label for="username" class="${properties.kcLabelClass!}"><#if !realm.loginWithEmailAllowed>${msg("username")}<#elseif !realm.registrationEmailAsUsername>${msg("usernameOrEmail")}<#else>${msg("email")}</#if></label>
-
-                    <#if usernameEditDisabled??>
-                        <input tabindex="1" id="username" class="${properties.kcInputClass!}" name="username" value="${(login.username!'')}" type="text" disabled />
-                    <#else>
-                        <input tabindex="1" id="username" class="${properties.kcInputClass!}" name="username" value="${(login.username!'')}"  type="text" autofocus autocomplete="off" />
-                    </#if>
-                </div>
-
-                <div class="${properties.kcFormGroupClass!}">
-                    <label for="password" class="${properties.kcLabelClass!}">${msg("password")}</label>
-                    <input tabindex="2" id="password" class="${properties.kcInputClass!}" name="password" type="password" autocomplete="off" />
-                </div>
-
-                <div class="${properties.kcFormGroupClass!} ${properties.kcFormSettingClass!}">
-                    <div id="kc-form-options">
-                        <#if realm.rememberMe && !usernameEditDisabled??>
-                            <div class="checkbox">
-                                <label>
-                                    <#if login.rememberMe??>
-                                        <input tabindex="3" id="rememberMe" name="rememberMe" type="checkbox" checked> ${msg("rememberMe")}
-                                    <#else>
-                                        <input tabindex="3" id="rememberMe" name="rememberMe" type="checkbox"> ${msg("rememberMe")}
-                                    </#if>
-                                </label>
-                            </div>
-                        </#if>
-                        </div>
-                        <div class="${properties.kcFormOptionsWrapperClass!}">
-                            <#if realm.resetPasswordAllowed>
-                                <span><a tabindex="5" href="${url.loginResetCredentialsUrl}">${msg("doForgotPassword")}</a></span>
-                            </#if>
-                        </div>
-
-                  </div>
-
-                  <div id="kc-form-buttons" class="${properties.kcFormGroupClass!}">
-                      <input type="hidden" id="id-hidden-input" name="credentialId" <#if auth.selectedCredential?has_content>value="${auth.selectedCredential}"</#if>/>
-                      <input tabindex="4" class="${properties.kcButtonClass!} ${properties.kcButtonPrimaryClass!} ${properties.kcButtonBlockClass!} ${properties.kcButtonLargeClass!}" name="login" id="kc-login" type="submit" value="${msg("doLogIn")}"/>
-                  </div>
-            </form>
-        </#if>
+    <#if section = "form">
+    <section class="p-auth__pic pink">
+        <div class="p-auth__catch">
+            <h1>研究チームと未来を共創</h1>
+            <p>自社の課題解決の鍵となる魅力的な研究シーズを<br>探す、見つける、そして繋がる</p>
         </div>
-        <#if realm.password && social.providers??>
-            <div id="kc-social-providers" class="${properties.kcFormSocialAccountContentClass!} ${properties.kcFormSocialAccountClass!}">
-                <ul class="${properties.kcFormSocialAccountListClass!} <#if social.providers?size gt 4>${properties.kcFormSocialAccountDoubleListClass!}</#if>">
-                    <#list social.providers as p>
-                        <li class="${properties.kcFormSocialAccountListLinkClass!}"><a href="${p.loginUrl}" id="zocial-${p.alias}" class="zocial ${p.providerId}"> <span>${p.displayName}</span></a></li>
-                    </#list>
-                </ul>
+        <img src="${url.resourcesPath}/img/illust_3.png">
+    </section>
+
+    <section class="p-auth__main">
+        <div class="p-auth__main__inner">
+          <div class="c-headline">
+            <h2>Sign in</h2>
+          </div>
+
+          <div id="kc-social-providers" class="${properties.kcFormSocialAccountContentClass!} ${properties.kcFormSocialAccountClass!}">
+              <ul>
+                  <#list social.providers as p>
+                    <li>
+                        <#switch p.providerId>
+                            <#case "facebook">
+                                <#assign alias="fb"/> 
+                                <#break>
+                            <#case "google">
+                                <#assign alias="gg"/> 
+                                <#break>
+                            <#case "twitter">
+                                <#assign alias="tw"/> 
+                                <#break>
+                        </#switch>
+                        <a href="${p.loginUrl}" class="p-auth__main__sns--${alias}">
+                            <p class="p-auth__main__sns__ic"><img src="${url.resourcesPath}/img/ic_login_${alias}.svg"></p>
+                            <p class="p-auth__main__sns__txt">${p.displayName}</p>
+                        </a>
+                    </li>
+                  </#list>
+              </ul>
+          </div>
+
+          <p class="p-auth__main__or"><span>or</span></p>
+
+          <form action="${url.loginAction}" method="post" ref="form" @submit="submit">
+            <ul class="c-form">
+              <li class="c-form__item">
+                <p class="c-form__item__ttl">メールアドレス</p>
+                <div class="c-form__item__body">
+                  <input type="email" class="c-inputtext" placeholder="sample@email.com" name="username" value="${(login.username!'')}">
+                  <#--  <p v-if="!emailCheckFlg" class="c-form__error">エラーメッセージ</p>  -->
+                </div>
+              </li>
+              <li class="c-form__item">
+                <p class="c-form__item__ttl">パスワード</p>
+                <div class="c-form__item__body">
+                  <input type="password" class="c-inputtext" name="password" value="${(login.username!'')}" v-model="password">
+                  <#--  <p v-if="!passwordCheckFlg" class="c-form__error">エラーメッセージ</p>  -->
+                </div>
+              </li>
+            </ul>
+            <div class="p-auth__main__btns">
+              <button class="c-btn--smallBgBlue">Sign in</button>
+              <a href="${url.loginResetCredentialsUrl}" class="l-textLink--purple">パスワードを忘れた方はこちら</a>
             </div>
-        </#if>
-      </div>
-    <#elseif section = "info" >
-        <#if realm.password && realm.registrationAllowed && !registrationDisabled??>
-            <div id="kc-registration">
-                <span>${msg("noAccount")} <a tabindex="6" href="${url.registrationUrl}">${msg("doRegister")}</a></span>
-            </div>
-        </#if>
+          </form>
+        </div>
+    </section>
     </#if>
 
 </@layout.registrationLayout>
